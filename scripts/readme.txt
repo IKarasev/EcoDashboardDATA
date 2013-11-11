@@ -1,1 +1,0 @@
-Here all scripts for testilng will be located
