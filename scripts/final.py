@@ -2,31 +2,46 @@ from random import *
 
 def get_final_set(iterations):
 		report=open("report_final.txt","w")
-		line = "{0};{1};{3};{4};{5};{6};{7};\n"
+		line = ""
 		report.write('#;air;water;land;waste;energy;energy;construction;index;\n')
-		args = []
+		indicators = []
+		weights = []
 		
 		print("Input indicators(value or \"r\" for random.")
 		print("air water land waste energy construction")
 		
-		while len(args) != 6:
-			args = input("> ").split(" ")
-			if len(args) != 6:
-				print("ERROR: 6 values are required. ",len(args),"are inputed")
-		for i in range(1,iterations+1):
-			air = def_value(args[0],1,10)
-			water = def_value(args[1],1,10)
-			land = def_value(args[2],1,10)
-			waste = def_value(args[3],1,10)
-			energy = def_value(args[4],1,10)
-			construction = def_value(args[5],1,10)
-			index = get_index(air,water,land,waste,energy,construction);
+		while len(indicators) != 6:
+			indicators = input("> ").split(" ")
+			if len(indicators) != 6:
+				print("ERROR: 6 values are required. ",len(indicators),"are inputed")
+		while len(weights) != 6:
+			weights = input("> ").split(" ")
+			if len(weights) != 6:
+				print("ERROR: 6 values are required. ",len(indicators),"are inputed")
+		
+		for i in range(0,len(weights)):
+			weights[i] = def_value(weights[i],0,100)
+			
+		for i in range(0,iterations):
+			for n in range(0,len(indicators)):
+				indicators[n] = def_value(indicators[n],0,100)
+			index = get_index(indicators,weights);
 			print("iteration ",i,":  complite", end=" - ")
-			report.write(line.format(i,air,water,land,waste,energy,construction,index))
+			line = str(i) + ";"
+			for n in range(0,len(indicators)):
+				line  = line + str(indicators[n]) + ";"
+			line = line + "/n"
+			report.write(line)
 			print("recorded")
 
-def get_index(air,water,land,waste,energy,construction):
-	return air+water+land+waste+energy+construction
+def get_index(indicators,weights):
+	index = 0
+	if len(indicators) == len(weights):
+		for i in range(0,len(indicators)):
+			index = index + indicators[i]*weights[i]
+		return index
+	else:
+		print("The numbber of weights does not match the number of weights")
 
 def def_value(val,min,max):
 	if val == "r":
